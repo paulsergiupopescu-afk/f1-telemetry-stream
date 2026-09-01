@@ -1,13 +1,58 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const dgram = require("dgram");
+const fs = require("fs");
+const http = require("http");
+const { pathToFileURL } = require("url");
+
+/** Full EA F1 packet parser shared with the web bridge (ESM, loaded lazily). */
+let parsePacket = null;
+void import(pathToFileURL(path.join(__dirname, "..", "bridge", "parse.mjs")).href)
+  .then((m) => {
+    parsePacket = m.parsePacket;
+  })
+  .catch(() => {
+    /* fall back to the built-in minimal parser below */
+  });
+
+const MIME = {
+  ".html": "text/html; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
+  ".ico": "image/x-icon",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".svg": "image/svg+xml",
+  ".woff2": "font/woff2",
+  ".json": "application/json",
+};
+
+/**
+ * The UI is a client-side router, so it is served over a loopback HTTP server
+ * (file:// breaks history routing) with an index.html fallback for every path.
+ */
+function serveApp() {
+  const root = path.join(__dirname, "..", "dist-desktop");
+  const server = http.createServer((req, res) => {
+    const url = decodeURIComponent((req.url || "/").split("?")[0]);
+    let file = path.join(root, url);
+    if (!file.startsWith(root) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
+      file = path.join(root, "index.html");
+    }
+    res.writeHead(200, { "content-type": MIME[path.extname(file)] || "application/octet-stream" });
+    fs.createReadStream(file).pipe(res);
+  });
+  return new Promise((resolve) => {
+    server.listen(0, "127.0.0.1", () => resolve(`http://127.0.0.1:${server.address().port}`));
+  });
+}
 
 const UDP_PORT = Number(process.env.F1_UDP_PORT || 20777);
 let win = null;
 let socket = null;
 let packets = 0;
 
-function createWindow() {
+async function createWindow() {
   win = new BrowserWindow({
     width: 1600,
     height: 980,
@@ -20,7 +65,8 @@ function createWindow() {
       nodeIntegration: false,
     },
   });
-  win.loadFile(path.join(__dirname, "..", "dist", "index.html"));
+  const base = await serveApp();
+  await win.loadURL(base);
 }
 
 /**
@@ -66,7 +112,7 @@ function startListener() {
   socket = dgram.createSocket({ type: "udp4", reuseAddr: true });
   socket.on("message", (msg) => {
     packets += 1;
-    const data = parse(msg);
+    const data = parsePacket ? parsePacket(msg) : parse(msg);
     if (data && win && !win.isDestroyed()) win.webContents.send("f1:telemetry", data);
   });
   socket.on("error", (err) => console.error("UDP error", err));
@@ -75,11 +121,11 @@ function startListener() {
 
 ipcMain.handle("f1:status", () => ({ listening: Boolean(socket), port: UDP_PORT, packets }));
 
-app.whenReady().then(() => {
-  createWindow();
+app.whenReady().then(async () => {
+  await createWindow();
   startListener();
   app.on("activate", () => {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    if (BrowserWindow.getAllWindows().length === 0) void createWindow();
   });
 });
 

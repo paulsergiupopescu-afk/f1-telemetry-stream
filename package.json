@@ -9,7 +9,12 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "bridge": "node bridge/f1-bridge.mjs",
+    "desktop:build": "vite build -c vite.desktop.config.ts",
+    "desktop:start": "npm run desktop:build && electron .",
+    "desktop:pack": "npm run desktop:build && electron-packager . \"F1 Telemetry Hub\" --platform=win32 --arch=x64 --out=electron-release --overwrite --ignore=\"^/src\" --ignore=\"^/dist$\" --ignore=\"^/electron-release\" --ignore=\"^/public\"",
+    "desktop:installer": "npm run desktop:build && electron-builder --win nsis"
   },
   "overrides": {
     "rolldown": "1.2.1"
@@ -86,5 +91,31 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
     "vite": "8.1.5"
-  }
+  },
+  "main": "electron/main.cjs",
+  "build": {
+    "appId": "app.lovable.f1telemetryhub",
+    "productName": "F1 Telemetry Hub",
+    "files": [
+      "electron/**",
+      "bridge/**",
+      "dist-desktop/**",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "artifactName": "F1-Telemetry-Hub-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "F1 Telemetry Hub"
+    }
+  },
+  "version": "1.0.0"
 }
