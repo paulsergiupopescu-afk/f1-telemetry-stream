@@ -148,18 +148,12 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     font-feature-settings: "tnum" 1;
-    background-image:
-      radial-gradient(
-        ellipse 90% 55% at 50% -10%,
-        oklch(0.598 0.235 26.5 / 12%),
-        transparent 70%
-      ),
-      linear-gradient(oklch(1 0 0 / 2.2%) 1px, transparent 1px),
-      linear-gradient(90deg, oklch(1 0 0 / 2.2%) 1px, transparent 1px);
-    background-size:
-      100% 100%,
-      52px 52px,
-      52px 52px;
+    -webkit-font-smoothing: antialiased;
+    background-image: radial-gradient(
+      ellipse 120% 70% at 50% -20%,
+      oklch(1 0 0 / 4%),
+      transparent 70%
+    );
     background-attachment: fixed;
   }
 
@@ -168,7 +162,8 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    letter-spacing: 0.01em;
+    font-weight: 600;
+    letter-spacing: -0.018em;
   }
 
   ::-webkit-scrollbar {
