@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PreRaceRouteImport } from './routes/pre-race'
+import { Route as SessionsRouteImport } from './routes/sessions'
 import { Route as SplitRouteImport } from './routes/split'
 import { Route as StrategyRouteImport } from './routes/strategy'
 
@@ -22,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
 const PreRaceRoute = PreRaceRouteImport.update({
   id: '/pre-race',
   path: '/pre-race',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SessionsRoute = SessionsRouteImport.update({
+  id: '/sessions',
+  path: '/sessions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SplitRoute = SplitRouteImport.update({
@@ -38,12 +44,14 @@ const StrategyRoute = StrategyRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/pre-race': typeof PreRaceRoute
+  '/sessions': typeof SessionsRoute
   '/split': typeof SplitRoute
   '/strategy': typeof StrategyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/pre-race': typeof PreRaceRoute
+  '/sessions': typeof SessionsRoute
   '/split': typeof SplitRoute
   '/strategy': typeof StrategyRoute
 }
@@ -51,20 +59,22 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/pre-race': typeof PreRaceRoute
+  '/sessions': typeof SessionsRoute
   '/split': typeof SplitRoute
   '/strategy': typeof StrategyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/pre-race' | '/split' | '/strategy'
+  fullPaths: '/' | '/pre-race' | '/sessions' | '/split' | '/strategy'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/pre-race' | '/split' | '/strategy'
-  id: '__root__' | '/' | '/pre-race' | '/split' | '/strategy'
+  to: '/' | '/pre-race' | '/sessions' | '/split' | '/strategy'
+  id: '__root__' | '/' | '/pre-race' | '/sessions' | '/split' | '/strategy'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PreRaceRoute: typeof PreRaceRoute
+  SessionsRoute: typeof SessionsRoute
   SplitRoute: typeof SplitRoute
   StrategyRoute: typeof StrategyRoute
 }
@@ -83,6 +93,13 @@ declare module '@tanstack/react-router' {
       path: '/pre-race'
       fullPath: '/pre-race'
       preLoaderRoute: typeof PreRaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sessions': {
+      id: '/sessions'
+      path: '/sessions'
+      fullPath: '/sessions'
+      preLoaderRoute: typeof SessionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/split': {
@@ -105,6 +122,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PreRaceRoute: PreRaceRoute,
+  SessionsRoute: SessionsRoute,
   SplitRoute: SplitRoute,
   StrategyRoute: StrategyRoute,
 }
