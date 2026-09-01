@@ -78,13 +78,13 @@
 
 :root,
 .dark {
-  --radius: 0.25rem;
+  --radius: 0.75rem;
 
-  --background: oklch(0.135 0.008 265);
-  --foreground: oklch(0.965 0.004 250);
-  --surface: oklch(0.183 0.009 265);
-  --surface-2: oklch(0.229 0.011 265);
-  --grid: oklch(1 0 0 / 6%);
+  --background: oklch(0.155 0.004 265);
+  --foreground: oklch(0.975 0.002 250);
+  --surface: oklch(0.196 0.005 265);
+  --surface-2: oklch(0.238 0.006 265);
+  --grid: oklch(1 0 0 / 5%);
 
   --card: oklch(0.183 0.009 265);
   --card-foreground: oklch(0.965 0.004 250);
