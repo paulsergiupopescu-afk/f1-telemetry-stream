@@ -30,6 +30,7 @@ export const Route = createFileRoute("/pre-race")({
 function PreRace() {
   const { state, strategy, options, restart } = useTelemetry();
   const track = getTrack(state.trackId);
+  const pct = Math.min(1, state.totalLaps / track.laps);
 
   return (
     <div className="grid gap-3 xl:grid-cols-[1fr_1.1fr]">
@@ -42,7 +43,7 @@ function PreRace() {
                 {TRACKS.map((t) => (
                   <button
                     key={t.id}
-                    onClick={() => restart({ trackId: t.id })}
+                    onClick={() => restart({ trackId: t.id, totalLaps: Math.max(5, Math.round(t.laps * pct)) })}
                     className={cn(
                       "rounded-sm border px-2 py-1.5 text-left font-display text-xs tracking-wider uppercase transition-colors",
                       t.id === state.trackId
@@ -66,8 +67,8 @@ function PreRace() {
                   <Button
                     key={p}
                     size="sm"
-                    variant={Math.round((options.raceDistance ?? 1) * 100) === p ? "default" : "outline"}
-                    onClick={() => restart({ raceDistance: p / 100 })}
+                    variant={Math.round(pct * 100) === p ? "default" : "outline"}
+                    onClick={() => restart({ totalLaps: Math.max(5, Math.round(track.laps * (p / 100))) })}
                   >
                     {p}%
                   </Button>
@@ -81,10 +82,10 @@ function PreRace() {
                 {(["soft", "medium", "hard"] as const).map((c) => (
                   <button
                     key={c}
-                    onClick={() => restart({ startCompound: c })}
+                    onClick={() => restart({ compound: c })}
                     className={cn(
                       "rounded-sm border px-3 py-1.5 font-display text-xs tracking-widest uppercase",
-                      options.startCompound === c ? "border-current" : "border-border opacity-60",
+                      options.compound === c ? "border-current" : "border-border opacity-60",
                     )}
                     style={{ color: compoundVar(c) }}
                   >
@@ -133,9 +134,9 @@ function PreRace() {
         <TrackMap track={track} pct={state.lapDistancePct} className="mx-auto h-72 w-full" />
         <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
           <Stat label="Race laps" value={state.totalLaps} />
-          <Stat label="Base lap" value={fmtLap(track.baseLapMs)} />
+          <Stat label="Base lap" value={fmtLap(track.lapTimeMs)} />
           <Stat label="Pit loss" value={`${(track.pitLossMs / 1000).toFixed(1)}s`} tone="warn" />
-          <Stat label="Tyre stress" value={track.tyreStress.toFixed(2)} tone="info" />
+          <Stat label="Tyre stress" value={track.degradation.toFixed(2)} tone="info" />
           <Stat label="Track temp" value={`${state.trackTemp.toFixed(0)}°C`} />
           <Stat label="Air temp" value={`${state.airTemp.toFixed(0)}°C`} />
           <Stat label="Rain chance" value={`${state.rainChance.toFixed(0)}%`} tone={state.rainChance > 40 ? "info" : "neutral"} />
