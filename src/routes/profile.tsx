@@ -88,7 +88,7 @@ function Profile() {
           <span className="label-xs">Driver</span>
           <h1 className="font-display text-4xl font-bold tracking-wide uppercase">{PLAYER.name}</h1>
           <p className="text-sm text-muted-foreground">
-            {PLAYER.team} · #{PLAYER.number}
+            {PLAYER.team} · {PLAYER.code}
           </p>
           <div className="mt-4 grid grid-cols-2 gap-4">
             <Stat label="Sessions logged" value={stats.sessionCount} />
