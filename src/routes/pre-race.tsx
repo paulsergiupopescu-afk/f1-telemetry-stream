@@ -45,7 +45,7 @@ function PreRace() {
                     key={t.id}
                     onClick={() => restart({ trackId: t.id, totalLaps: Math.max(5, Math.round(t.laps * pct)) })}
                     className={cn(
-                      "rounded-sm border px-2 py-1.5 text-left font-display text-xs tracking-wider uppercase transition-colors",
+                      "rounded-sm border px-2 py-1.5 text-left font-display text-xs tracking-[0.02em] uppercase transition-colors",
                       t.id === state.trackId
                         ? "border-primary bg-primary/15 text-foreground"
                         : "border-border text-muted-foreground hover:bg-surface-2",
@@ -84,7 +84,7 @@ function PreRace() {
                     key={c}
                     onClick={() => restart({ compound: c })}
                     className={cn(
-                      "rounded-sm border px-3 py-1.5 font-display text-xs tracking-widest uppercase",
+                      "rounded-sm border px-3 py-1.5 font-display text-xs tracking-[0.04em] uppercase",
                       options.compound === c ? "border-current" : "border-border opacity-60",
                     )}
                     style={{ color: compoundVar(c) }}

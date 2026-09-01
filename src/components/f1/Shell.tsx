@@ -58,7 +58,7 @@ export function Shell({ children }: { children: ReactNode }) {
             <Activity className="h-4 w-4" />
           </span>
           <div className="leading-tight">
-            <div className="font-display text-base font-bold tracking-[0.18em] uppercase">
+            <div className="font-display text-base font-bold tracking-[0.04em] uppercase">
               Telemetry
             </div>
             <div className="label-xs text-primary">F1 Hub · 26</div>
@@ -73,7 +73,7 @@ export function Shell({ children }: { children: ReactNode }) {
                 key={to}
                 to={to}
                 className={cn(
-                  "flex items-center gap-2.5 rounded-sm px-2.5 py-2 font-display text-sm tracking-wider uppercase transition-colors",
+                  "flex items-center gap-2.5 rounded-sm px-2.5 py-2 font-display text-sm tracking-[0.02em] uppercase transition-colors",
                   active
                     ? "bg-primary/15 text-foreground shadow-[inset_2px_0_0_0_var(--primary)]"
                     : "text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
@@ -156,7 +156,7 @@ export function Shell({ children }: { children: ReactNode }) {
                 key={to}
                 to={to}
                 className={cn(
-                  "flex shrink-0 items-center gap-1.5 rounded-sm px-2 py-1.5 font-display text-xs tracking-wider uppercase",
+                  "flex shrink-0 items-center gap-1.5 rounded-sm px-2 py-1.5 font-display text-xs tracking-[0.02em] uppercase",
                   pathname === to ? "bg-primary/15 text-foreground" : "text-muted-foreground",
                 )}
               >

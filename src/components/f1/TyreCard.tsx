@@ -28,7 +28,7 @@ export function TyreCard({ tyres }: { tyres: TyreState }) {
           >
             {COMPOUND_LABEL[tyres.compound][0]}
           </span>
-          <span className="font-display text-sm tracking-widest uppercase">
+          <span className="font-display text-sm tracking-[0.04em] uppercase">
             {COMPOUND_LABEL[tyres.compound]}
           </span>
         </div>
