@@ -123,13 +123,14 @@ export function analyseCoach(state: TelemetryState, habits: DrivingHabits): Coac
     });
   }
 
-  if (sectorLoss[weakestSector - 1] > 80) {
+  const weakLoss = sectorLoss[weakestSector - 1] ?? 0;
+  if (weakLoss > 80) {
     notes.push({
       id: "sector",
       title: `Sector ${weakestSector} is costing you`,
-      detail: `You lose ${(sectorLoss[weakestSector - 1] / 1000).toFixed(3)}s in sector ${weakestSector} compared with your own best. Spend a run doing nothing but that sector — build the rest of the lap around it.`,
+      detail: `You lose ${(weakLoss / 1000).toFixed(3)}s in sector ${weakestSector} compared with your own best. Spend a run doing nothing but that sector — build the rest of the lap around it.`,
       tone: "warn",
-      gainMs: sectorLoss[weakestSector - 1],
+      gainMs: weakLoss,
     });
   }
 
