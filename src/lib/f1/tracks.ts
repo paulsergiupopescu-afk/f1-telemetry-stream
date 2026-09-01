@@ -46,7 +46,7 @@ export const TRACK_MAP: Record<string, TrackInfo> = Object.fromEntries(
 );
 
 export function getTrack(id: string): TrackInfo {
-  return TRACK_MAP[id] ?? TRACKS[0];
+  return TRACK_MAP[id] ?? (TRACKS[0] as TrackInfo);
 }
 
 /** Deterministic, seeded circuit outline used for the mini track maps. */
