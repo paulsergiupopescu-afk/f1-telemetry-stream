@@ -7,6 +7,7 @@ import {
   History,
   Route as RouteIcon,
   SplitSquareHorizontal,
+  Timer,
   Trophy,
   User,
 } from "lucide-react";
