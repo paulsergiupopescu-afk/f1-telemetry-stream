@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PreRaceRouteImport } from './routes/pre-race'
 import { Route as StrategyRouteImport } from './routes/strategy'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PreRaceRoute = PreRaceRouteImport.update({
+  id: '/pre-race',
+  path: '/pre-race',
   getParentRoute: () => rootRouteImport,
 } as any)
 const StrategyRoute = StrategyRouteImport.update({
@@ -25,27 +31,31 @@ const StrategyRoute = StrategyRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/pre-race': typeof PreRaceRoute
   '/strategy': typeof StrategyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/pre-race': typeof PreRaceRoute
   '/strategy': typeof StrategyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/pre-race': typeof PreRaceRoute
   '/strategy': typeof StrategyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/strategy'
+  fullPaths: '/' | '/pre-race' | '/strategy'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/strategy'
-  id: '__root__' | '/' | '/strategy'
+  to: '/' | '/pre-race' | '/strategy'
+  id: '__root__' | '/' | '/pre-race' | '/strategy'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PreRaceRoute: typeof PreRaceRoute
   StrategyRoute: typeof StrategyRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pre-race': {
+      id: '/pre-race'
+      path: '/pre-race'
+      fullPath: '/pre-race'
+      preLoaderRoute: typeof PreRaceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/strategy': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PreRaceRoute: PreRaceRoute,
   StrategyRoute: StrategyRoute,
 }
 export const routeTree = rootRouteImport
