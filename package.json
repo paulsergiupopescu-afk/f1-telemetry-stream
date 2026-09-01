@@ -118,6 +118,9 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "F1 Telemetry Hub"
+    },
+    "directories": {
+      "output": "release"
     }
   },
   "version": "1.0.0"
