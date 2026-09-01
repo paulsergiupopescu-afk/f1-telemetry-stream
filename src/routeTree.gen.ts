@@ -10,33 +10,115 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ChampionshipRouteImport } from './routes/championship'
+import { Route as PreRaceRouteImport } from './routes/pre-race'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as SessionsRouteImport } from './routes/sessions'
+import { Route as SplitRouteImport } from './routes/split'
+import { Route as StrategyRouteImport } from './routes/strategy'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ChampionshipRoute = ChampionshipRouteImport.update({
+  id: '/championship',
+  path: '/championship',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PreRaceRoute = PreRaceRouteImport.update({
+  id: '/pre-race',
+  path: '/pre-race',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SessionsRoute = SessionsRouteImport.update({
+  id: '/sessions',
+  path: '/sessions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SplitRoute = SplitRouteImport.update({
+  id: '/split',
+  path: '/split',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StrategyRoute = StrategyRouteImport.update({
+  id: '/strategy',
+  path: '/strategy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/championship': typeof ChampionshipRoute
+  '/pre-race': typeof PreRaceRoute
+  '/profile': typeof ProfileRoute
+  '/sessions': typeof SessionsRoute
+  '/split': typeof SplitRoute
+  '/strategy': typeof StrategyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/championship': typeof ChampionshipRoute
+  '/pre-race': typeof PreRaceRoute
+  '/profile': typeof ProfileRoute
+  '/sessions': typeof SessionsRoute
+  '/split': typeof SplitRoute
+  '/strategy': typeof StrategyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/championship': typeof ChampionshipRoute
+  '/pre-race': typeof PreRaceRoute
+  '/profile': typeof ProfileRoute
+  '/sessions': typeof SessionsRoute
+  '/split': typeof SplitRoute
+  '/strategy': typeof StrategyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/championship'
+    | '/pre-race'
+    | '/profile'
+    | '/sessions'
+    | '/split'
+    | '/strategy'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/championship'
+    | '/pre-race'
+    | '/profile'
+    | '/sessions'
+    | '/split'
+    | '/strategy'
+  id:
+    | '__root__'
+    | '/'
+    | '/championship'
+    | '/pre-race'
+    | '/profile'
+    | '/sessions'
+    | '/split'
+    | '/strategy'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ChampionshipRoute: typeof ChampionshipRoute
+  PreRaceRoute: typeof PreRaceRoute
+  ProfileRoute: typeof ProfileRoute
+  SessionsRoute: typeof SessionsRoute
+  SplitRoute: typeof SplitRoute
+  StrategyRoute: typeof StrategyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +130,59 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/championship': {
+      id: '/championship'
+      path: '/championship'
+      fullPath: '/championship'
+      preLoaderRoute: typeof ChampionshipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pre-race': {
+      id: '/pre-race'
+      path: '/pre-race'
+      fullPath: '/pre-race'
+      preLoaderRoute: typeof PreRaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sessions': {
+      id: '/sessions'
+      path: '/sessions'
+      fullPath: '/sessions'
+      preLoaderRoute: typeof SessionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/split': {
+      id: '/split'
+      path: '/split'
+      fullPath: '/split'
+      preLoaderRoute: typeof SplitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/strategy': {
+      id: '/strategy'
+      path: '/strategy'
+      fullPath: '/strategy'
+      preLoaderRoute: typeof StrategyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ChampionshipRoute: ChampionshipRoute,
+  PreRaceRoute: PreRaceRoute,
+  ProfileRoute: ProfileRoute,
+  SessionsRoute: SessionsRoute,
+  SplitRoute: SplitRoute,
+  StrategyRoute: StrategyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
