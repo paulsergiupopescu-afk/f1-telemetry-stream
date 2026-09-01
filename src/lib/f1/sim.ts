@@ -223,20 +223,20 @@ export function step(prev: TelemetryState, dtMs: number): TelemetryState {
     else if (roll < 0.6) s.phase = "SC";
     if (s.phase !== "GREEN")
       s.events = [
-        { lap: s.lap, kind: "warn", text: `${s.phase === "SC" ? "Safety car" : "Virtual safety car"} deployed.`, atMs: s.sessionTimeMs },
+        { lap: s.lap, kind: "warn" as const, text: `${s.phase === "SC" ? "Safety car" : "Virtual safety car"} deployed.`, atMs: s.sessionTimeMs },
         ...s.events,
       ].slice(0, 60);
   } else if (s.phase === "SC" || s.phase === "VSC") {
     if (rand() < 0.0025) {
       s.phase = "GREEN";
-      s.events = [{ lap: s.lap, kind: "info", text: "Track is green — racing resumes.", atMs: s.sessionTimeMs }, ...s.events].slice(0, 60);
+      s.events = [{ lap: s.lap, kind: "info" as const, text: "Track is green — racing resumes.", atMs: s.sessionTimeMs }, ...s.events].slice(0, 60);
     }
   }
 
   // Occasional damage
   if (rand() < 0.00035 && s.phase === "GREEN") {
     s.damage.frontWingLeft = Math.min(100, s.damage.frontWingLeft + 8 + rand() * 22);
-    s.events = [{ lap: s.lap, kind: "danger", text: "Front wing contact — damage detected.", atMs: s.sessionTimeMs }, ...s.events].slice(0, 60);
+    s.events = [{ lap: s.lap, kind: "danger" as const, text: "Front wing contact — damage detected.", atMs: s.sessionTimeMs }, ...s.events].slice(0, 60);
   }
 
   // Lap crossing
@@ -276,7 +276,7 @@ export function step(prev: TelemetryState, dtMs: number): TelemetryState {
     s.field = s.field.map((f) => ({ ...f, tyreAge: f.tyreAge + 1 }));
     if (rand() < 0.22 && s.position > 1) {
       s.position -= 1;
-      s.events = [{ lap: s.lap, kind: "info", text: `Position gained — now P${s.position}.`, atMs: s.sessionTimeMs }, ...s.events].slice(0, 60);
+      s.events = [{ lap: s.lap, kind: "info" as const, text: `Position gained — now P${s.position}.`, atMs: s.sessionTimeMs }, ...s.events].slice(0, 60);
     } else if (rand() < 0.12 && s.position < s.fieldSize) {
       s.position += 1;
     }
@@ -315,7 +315,7 @@ export function setPhase(prev: TelemetryState, phase: RaceControlPhase): Telemet
   return {
     ...prev,
     phase,
-    events: [{ lap: prev.lap, kind: phase === "GREEN" ? "info" : "warn", text: `Race control: ${phase.replace("_", " ")}.`, atMs: prev.sessionTimeMs }, ...prev.events].slice(0, 60),
+    events: [{ lap: prev.lap, kind: (phase === "GREEN" ? "info" : "warn") as RaceEvent["kind"], text: `Race control: ${phase.replace("_", " ")}.`, atMs: prev.sessionTimeMs }, ...prev.events].slice(0, 60),
   };
 }
 
