@@ -32,8 +32,8 @@ function Championship() {
 
   const drivers = useMemo(() => {
     const rows = state.field.map((f) => {
-      const base = f.isPlayer ? 0 : GRID.find((g) => g.code === f.code)?.rating ?? 80;
-      const season = f.isPlayer ? 0 : Math.round((base - 74) * 14);
+      const pace = GRID.find((g) => g.code === f.code)?.pace ?? 0.6;
+      const season = f.isPlayer ? 96 : Math.max(0, Math.round((0.9 - pace) * 320));
       const racePoints = POINTS[f.position - 1] ?? 0;
       return {
         code: f.code,
