@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PreRaceRouteImport } from './routes/pre-race'
+import { Route as SplitRouteImport } from './routes/split'
 import { Route as StrategyRouteImport } from './routes/strategy'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,11 @@ const PreRaceRoute = PreRaceRouteImport.update({
   path: '/pre-race',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SplitRoute = SplitRouteImport.update({
+  id: '/split',
+  path: '/split',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const StrategyRoute = StrategyRouteImport.update({
   id: '/strategy',
   path: '/strategy',
@@ -32,30 +38,34 @@ const StrategyRoute = StrategyRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/pre-race': typeof PreRaceRoute
+  '/split': typeof SplitRoute
   '/strategy': typeof StrategyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/pre-race': typeof PreRaceRoute
+  '/split': typeof SplitRoute
   '/strategy': typeof StrategyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/pre-race': typeof PreRaceRoute
+  '/split': typeof SplitRoute
   '/strategy': typeof StrategyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/pre-race' | '/strategy'
+  fullPaths: '/' | '/pre-race' | '/split' | '/strategy'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/pre-race' | '/strategy'
-  id: '__root__' | '/' | '/pre-race' | '/strategy'
+  to: '/' | '/pre-race' | '/split' | '/strategy'
+  id: '__root__' | '/' | '/pre-race' | '/split' | '/strategy'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PreRaceRoute: typeof PreRaceRoute
+  SplitRoute: typeof SplitRoute
   StrategyRoute: typeof StrategyRoute
 }
 
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PreRaceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/split': {
+      id: '/split'
+      path: '/split'
+      fullPath: '/split'
+      preLoaderRoute: typeof SplitRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/strategy': {
       id: '/strategy'
       path: '/strategy'
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PreRaceRoute: PreRaceRoute,
+  SplitRoute: SplitRoute,
   StrategyRoute: StrategyRoute,
 }
 export const routeTree = rootRouteImport
