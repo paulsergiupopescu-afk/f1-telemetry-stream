@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 
 const NAV = [
   { to: "/", label: "Solo Engineer", icon: Gauge },
+  { to: "/coach", label: "Coach Mode", icon: Timer },
   { to: "/strategy", label: "Live Strategy", icon: RouteIcon },
   { to: "/pre-race", label: "Pre-Race", icon: Flag },
   { to: "/split", label: "Split Screen", icon: SplitSquareHorizontal },
