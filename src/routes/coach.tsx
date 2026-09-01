@@ -165,12 +165,7 @@ function Coach() {
               </div>
               <Stat label="Current" value={fmtLap(state.currentLapMs)} size="lg" />
               <Stat label="Last" value={fmtLap(coach.lastMs)} size="lg" />
-              <Stat
-                label="Personal best"
-                value={fmtLap(coach.bestMs)}
-                size="lg"
-                tone="purple" as never
-              />
+              <Stat label="Personal best" value={fmtLap(coach.bestMs)} size="lg" tone="info" />
               <Stat label="Theoretical" value={fmtLap(coach.theoreticalMs)} size="lg" tone="go" />
               <Stat
                 label="Left on table"
