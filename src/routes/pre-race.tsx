@@ -6,6 +6,8 @@ import { useTelemetry } from "@/lib/f1/store";
 import { TRACKS, getTrack } from "@/lib/f1/tracks";
 import { COMPOUND_LABEL, compoundVar, fmtLap } from "@/lib/f1/format";
 import { Button } from "@/components/ui/button";
+import { LiveSource } from "@/components/f1/LiveSource";
+import { recommendSetup } from "@/lib/f1/setup";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/pre-race")({
@@ -31,6 +33,13 @@ function PreRace() {
   const { state, strategy, options, restart } = useTelemetry();
   const track = getTrack(state.trackId);
   const pct = Math.min(1, state.totalLaps / track.laps);
+  const setup = recommendSetup({
+    trackId: state.trackId,
+    rainChance: state.rainChance,
+    trackTemp: state.trackTemp,
+    compound: options.compound,
+    raceLaps: state.totalLaps,
+  });
 
   return (
     <div className="grid gap-3 xl:grid-cols-[1fr_1.1fr]">
@@ -128,8 +137,11 @@ function PreRace() {
             ))}
           </ul>
         </Panel>
+
+        <LiveSource />
       </div>
 
+      <div className="space-y-3">
       <Panel title={track.name} right={<span className="label-xs">{track.country}</span>}>
         <TrackMap track={track} pct={state.lapDistancePct} className="mx-auto h-72 w-full" />
         <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -143,6 +155,49 @@ function PreRace() {
           <Stat label="Weather" value={state.weather} />
         </div>
       </Panel>
+
+      <Panel
+        title="Recommended car setup"
+        accent="warn"
+        right={<span className="label-xs">{setup.profile}</span>}
+      >
+        <p className="text-[13px] text-muted-foreground">{setup.summary}</p>
+        <div className="mt-3 grid gap-4 sm:grid-cols-2">
+          {setup.groups.map((g) => (
+            <div key={g.title}>
+              <span className="label-xs">{g.title}</span>
+              <div className="mt-1.5 space-y-2">
+                {g.items.map((it) => (
+                  <div key={it.label} className="rounded-lg border border-border bg-surface-2/40 px-2.5 py-2">
+                    <div className="flex items-baseline justify-between gap-2">
+                      <span className="text-[13px]">{it.label}</span>
+                      <span className="num text-sm font-semibold">{it.value}</span>
+                    </div>
+                    {typeof it.scale === "number" && (
+                      <div className="mt-1.5 h-1 rounded-full bg-surface-2">
+                        <div
+                          className="h-1 rounded-full bg-primary"
+                          style={{ width: `${Math.max(3, Math.min(100, it.scale * 100))}%` }}
+                        />
+                      </div>
+                    )}
+                    <div className="mt-1 text-[11px] text-muted-foreground">{it.hint}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+        <ul className="mt-3 space-y-1.5 border-t border-border pt-3">
+          {setup.notes.map((n) => (
+            <li key={n} className="flex gap-2 text-[13px] text-muted-foreground">
+              <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-primary" />
+              {n}
+            </li>
+          ))}
+        </ul>
+      </Panel>
+      </div>
     </div>
   );
 }
