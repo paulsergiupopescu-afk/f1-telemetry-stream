@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BigscreenRouteImport } from './routes/bigscreen'
 import { Route as ChampionshipRouteImport } from './routes/championship'
 import { Route as CoachRouteImport } from './routes/coach'
 import { Route as PreRaceRouteImport } from './routes/pre-race'
@@ -21,6 +22,11 @@ import { Route as StrategyRouteImport } from './routes/strategy'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BigscreenRoute = BigscreenRouteImport.update({
+  id: '/bigscreen',
+  path: '/bigscreen',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ChampionshipRoute = ChampionshipRouteImport.update({
@@ -61,6 +67,7 @@ const StrategyRoute = StrategyRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/bigscreen': typeof BigscreenRoute
   '/championship': typeof ChampionshipRoute
   '/coach': typeof CoachRoute
   '/pre-race': typeof PreRaceRoute
@@ -71,6 +78,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/bigscreen': typeof BigscreenRoute
   '/championship': typeof ChampionshipRoute
   '/coach': typeof CoachRoute
   '/pre-race': typeof PreRaceRoute
@@ -82,6 +90,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/bigscreen': typeof BigscreenRoute
   '/championship': typeof ChampionshipRoute
   '/coach': typeof CoachRoute
   '/pre-race': typeof PreRaceRoute
@@ -94,6 +103,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/bigscreen'
     | '/championship'
     | '/coach'
     | '/pre-race'
@@ -104,6 +114,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/bigscreen'
     | '/championship'
     | '/coach'
     | '/pre-race'
@@ -114,6 +125,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/bigscreen'
     | '/championship'
     | '/coach'
     | '/pre-race'
@@ -125,6 +137,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BigscreenRoute: typeof BigscreenRoute
   ChampionshipRoute: typeof ChampionshipRoute
   CoachRoute: typeof CoachRoute
   PreRaceRoute: typeof PreRaceRoute
@@ -141,6 +154,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bigscreen': {
+      id: '/bigscreen'
+      path: '/bigscreen'
+      fullPath: '/bigscreen'
+      preLoaderRoute: typeof BigscreenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/championship': {
@@ -197,6 +217,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BigscreenRoute: BigscreenRoute,
   ChampionshipRoute: ChampionshipRoute,
   CoachRoute: CoachRoute,
   PreRaceRoute: PreRaceRoute,

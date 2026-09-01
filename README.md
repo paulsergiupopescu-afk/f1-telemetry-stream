@@ -22,3 +22,23 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+
+## Desktop app (Windows .exe + installer wizard)
+
+Run these on a Windows PC with Node 20+ installed:
+
+```bash
+npm install
+npm run desktop:start      # build + run the desktop app locally
+npm run desktop:installer  # builds release/F1-Telemetry-Hub-Setup-1.0.0.exe (NSIS wizard)
+```
+
+The wizard lets you choose the install folder and creates desktop + start-menu
+shortcuts. The desktop app opens UDP port 20777 itself, so in-game you only set
+Settings -> Telemetry -> UDP Telemetry: On, IP 127.0.0.1, Port 20777, Rate 60Hz.
+
+For the web version, run `npm run bridge` on the gaming PC and press Connect in
+the Telemetry Source panel.
+
+Note: the installer must be produced on Windows (or Linux with Wine) — this
+sandbox has no Wine, so only the unpacked build can be produced here.

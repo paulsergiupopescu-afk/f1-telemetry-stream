@@ -8,11 +8,13 @@ import {
   Route as RouteIcon,
   SplitSquareHorizontal,
   Timer,
+  Tv,
   Trophy,
   User,
 } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { LiveSource } from "@/components/f1/LiveSource";
 import { useTelemetry } from "@/lib/f1/store";
 import { getTrack } from "@/lib/f1/tracks";
 import { fmtClock } from "@/lib/f1/format";
@@ -23,6 +25,7 @@ const NAV = [
   { to: "/coach", label: "Coach Mode", icon: Timer },
   { to: "/strategy", label: "Live Strategy", icon: RouteIcon },
   { to: "/pre-race", label: "Pre-Race", icon: Flag },
+  { to: "/bigscreen", label: "Big Screen", icon: Tv },
   { to: "/split", label: "Split Screen", icon: SplitSquareHorizontal },
   { to: "/sessions", label: "Sessions", icon: History },
   { to: "/profile", label: "Driver Profile", icon: User },
@@ -92,7 +95,14 @@ export function Shell({ children }: { children: ReactNode }) {
         <div className="border-t border-sidebar-border p-3">
           <div className="label-xs mb-1">Source</div>
           <div className="num text-xs text-foreground/80">
-            {desktop ? "Desktop UDP :20777" : "Built-in race simulator"}
+            {desktop
+              ? "Desktop UDP :20777"
+              : state.connection === "LIVE"
+                ? "Live UDP bridge"
+                : "Built-in race simulator"}
+          </div>
+          <div className="mt-1.5">
+            <LiveSource compact />
           </div>
         </div>
       </aside>

@@ -5,7 +5,8 @@ import { Gauge, Pause, Play, RotateCcw, Target, Timer, TrendingDown, TrendingUp 
 import { Bar, Panel, Stat, toneText } from "@/components/f1/Panel";
 import { Button } from "@/components/ui/button";
 import { PaceChart } from "@/components/f1/PaceChart";
-import { analyseCoach, DRILLS, segmentLabel, type DrivingHabits } from "@/lib/f1/coach";
+import { analyseCoach, segmentLabel, type DrivingHabits } from "@/lib/f1/coach";
+import { DrillRunner } from "@/components/f1/DrillRunner";
 import { fmtDelta, fmtLap, fmtSector } from "@/lib/f1/format";
 import { useTelemetry } from "@/lib/f1/store";
 import { getTrack, TRACKS } from "@/lib/f1/tracks";
@@ -74,8 +75,6 @@ function Coach() {
   const habits = useHabits();
   const coach = useMemo(() => analyseCoach(state, habits), [state, habits]);
   const track = getTrack(state.trackId);
-  const [drill, setDrill] = useState<string>(DRILLS[0].id);
-  const activeDrill = DRILLS.find((d) => d.id === drill) ?? DRILLS[0];
 
   const startTimeTrial = (trackId: string) =>
     restart({ ...options, trackId, sessionType: "time-trial", totalLaps: 0 });
@@ -352,30 +351,12 @@ function Coach() {
           </Panel>
 
           {/* Drills */}
-          <Panel title="Practice drill" accent="info">
-            <div className="flex flex-wrap gap-1.5">
-              {DRILLS.map((d) => (
-                <button
-                  key={d.id}
-                  onClick={() => setDrill(d.id)}
-                  className={cn(
-                    "rounded-full border px-3 py-1 text-xs transition-colors",
-                    drill === d.id
-                      ? "border-primary/50 bg-primary/15 text-foreground"
-                      : "border-border text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  {d.name}
-                </button>
-              ))}
-            </div>
-            <p className="mt-3 text-[13px] leading-relaxed text-muted-foreground">
-              {activeDrill.detail}
-            </p>
-            <div className="num mt-2 text-xs text-muted-foreground">
-              Recommended length: {activeDrill.laps} laps
-            </div>
-          </Panel>
+          <DrillRunner
+            laps={state.laps}
+            habits={habits}
+            bestMs={coach.bestMs}
+            weakestSector={coach.weakestSector}
+          />
         </div>
       </div>
 
