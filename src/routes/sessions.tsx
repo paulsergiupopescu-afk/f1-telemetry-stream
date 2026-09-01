@@ -123,7 +123,7 @@ function Sessions() {
           <Panel title="Lap log">
             <div className="max-h-80 overflow-y-auto">
               <table className="w-full text-sm">
-                <thead className="sticky top-0 bg-surface-1">
+                <thead className="sticky top-0 bg-surface">
                   <tr className="label-xs text-left">
                     <th className="py-1">Lap</th>
                     <th>Time</th>

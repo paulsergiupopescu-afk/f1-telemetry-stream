@@ -126,7 +126,7 @@ function Championship() {
                     </span>
                     <span className="num text-sm font-semibold">{c.total}</span>
                   </div>
-                  <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-surface-1">
+                  <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-surface">
                     <div
                       className="h-full rounded-full"
                       style={{ width: `${(c.total / max) * 100}%`, background: c.color }}
