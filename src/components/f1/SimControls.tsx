@@ -50,7 +50,7 @@ export function SimControls() {
       <Button
         size="sm"
         variant="outline"
-        onClick={() => forcePhase(state.phase === "GREEN" ? "SAFETY_CAR" : "GREEN")}
+        onClick={() => forcePhase(state.phase === "GREEN" ? "SC" : "GREEN")}
       >
         {state.phase === "GREEN" ? <ShieldAlert className="h-3.5 w-3.5" /> : <Flag className="h-3.5 w-3.5" />}
         {state.phase === "GREEN" ? "Deploy SC" : "Green flag"}
