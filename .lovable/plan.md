@@ -1,4 +1,4 @@
-# F1 Telemetry Hub — Rebuild as a Modern Web App
+# F1 Telemetry Hub — Modern Rebuild + Windows .exe
 
 ## What your app is today
 
@@ -10,46 +10,55 @@ A Windows desktop race assistant for EA SPORTS F1 25 / F1 2026 that listens to t
 - **Live Strategy** — ranked pit strategies with rejoin prediction, wear projections, confidence
 - **Sessions & Reports** — lap-by-lap history, stint degradation, decision timeline, exports
 - **Driver Profile** — per-session-type learning (TT / Practice / Quali / Race), track-specific strengths
-- **Championship & Race Control** — standings, phase handling (SC/VSC/red flag)
+- **Championship & Race Control** — standings, phase handling (SC / VSC / red flag)
 
-The Python code is solid but the experience is a basic WebView desktop window. We'll rebuild it as a polished, fast, beautiful **web app** that keeps every feature and adds a far better visual design.
+The engine logic is solid; the experience is a plain WebView window. We rebuild the whole front end as a fast, beautiful app and ship it both as a web app and as a real Windows `.exe`.
 
-## How the web version will work
+## Two ways to run it
 
-Browsers can't read UDP packets directly, so the plan has two modes:
+1. **Web app** — everything works in the browser, driven by a realistic built-in race simulator (20 cars, tyre wear, ERS, weather, safety cars) so every screen is explorable with zero setup.
+2. **Desktop `.exe`** — the same app packaged with Electron. The desktop build has a real advantage: it can open UDP port 20777 itself, so it reads live telemetry straight from the game with **no Python, no bridge script, no install steps**. Just launch the exe, enable UDP telemetry in F1, and it goes LIVE.
 
-1. **Demo / Simulation mode (works instantly)** — a realistic live race simulator drives all dashboards with synthetic 60 Hz telemetry (20 cars, tyre wear, ERS, weather, safety cars). Everything is explorable with zero setup. Also great for showcasing the app.
-2. **Live mode via a small bridge** — a single lightweight Python script (`bridge.py`, derived from your existing telemetry parser) runs next to the game, listens on UDP 20777, and forwards decoded telemetry to the web app over WebSocket. Clear setup instructions built into the app.
+## Visual refurbishment
 
-## Design direction
+A committed "pit wall at night" direction, replacing the current flat WebView look:
 
-Dark "pit wall at night" aesthetic: near-black surfaces, race-red accent, telemetry-green/amber status colors, tabular racing numerals, subtle scanline/grid textures, glowing live indicators. Distinct typography (condensed display + mono for data). Fully responsive, desktop-first dashboard that fits 1920×1080 without scrolling, collapsing cleanly on smaller screens.
+- Near-black layered surfaces with subtle carbon-weave and grid texture, thin luminous dividers
+- Race-red primary accent, telemetry green/amber/red status scale, compound-accurate tyre colors
+- Condensed display typeface for headings and calls, tabular mono numerals for all live data so digits never jitter
+- Glowing LIVE pulse, animated delta bar, sweeping micro-sector strip, rev-light style header bar
+- Motion: numbers roll, the command banner slams in on change, panels stagger on mount — fast and mechanical, never bouncy
+- Density-first dashboard that fits 1920×1080 without scrolling, degrading cleanly to smaller windows
+
+Before building, I'll show you 3 rendered design directions for the main cockpit dashboard so you pick the look.
 
 ## Pages
 
-1. **Live / Solo Engineer** (`/`) — command banner, loss diagnosis, delta + micro-sector strip, timing tower, car state (ERS/fuel/damage), four-corner tyre card, race pace graph, pit window call
+1. **Live / Solo Engineer** (`/`) — command banner, loss diagnosis, delta + micro-sector strip, timing tower, car state (ERS / fuel / damage), four-corner tyre card, race-pace graph, pit call
 2. **Split Screen** (`/split`) — two drivers side by side
-3. **Pre-Race** (`/pre-race`) — race setup wizard + setup values + ranked pit plans
-4. **Strategy** (`/strategy`) — ranked alternative strategies with projected time, finish wear, rejoin, confidence
-5. **Sessions** (`/sessions`) — session list + full report view (laps, sectors, stints, timeline)
-6. **Driver Profile** (`/profile`) — learned strengths/weaknesses per session type and per track
-7. **Championship** (`/championship`) — driver/constructor standings
+3. **Pre-Race** (`/pre-race`) — race context wizard, setup values, ranked pit plans
+4. **Strategy** (`/strategy`) — ranked alternatives with projected time, finish wear, rejoin, confidence, evidence
+5. **Sessions** (`/sessions`) — session list and full report (laps, sectors, stints, decision timeline)
+6. **Driver Profile** (`/profile`) — learned strengths and weaknesses per session type and per track
+7. **Championship** (`/championship`) — driver and constructor standings
 
 ## Technical plan
 
-- Port the core engines from Python to TypeScript: strategy engine, pace tracker/outlier filtering, delta + micro-sectors, ERS/tyre call logic, race-control state machine, loss diagnosis
-- Track data (circuit info, projected track maps, setup library) ported to typed JSON/TS modules
-- Demo mode: seeded simulation engine producing believable live sessions; Session reports persist in the database (Lovable Cloud) so Sessions/Profile accumulate history
-- Live mode: `bridge.py` (single file, derived from `f1_26_split_telemetry.py`) + WebSocket ingest endpoint + "Connection" panel showing WAITING/LIVE status, packet rate, and setup instructions
+- Port the core engines from Python to TypeScript: strategy optimizer, pace tracker with outlier filtering, delta and micro-sectors, ERS/tyre call logic, race-control state machine, loss diagnosis
+- Track data, projected track maps, and the setup library ported to typed modules
+- Simulation engine as the shared data layer so every page has believable live data
+- Session history persisted locally (IndexedDB) so Sessions and Driver Profile accumulate across runs — the desktop app stays fully offline
+- Electron packaging: `electron/main.cjs` opens a `dgram` UDP socket on 20777, decodes F1 25 / 2026 packets, and streams them to the UI over IPC; Vite built with `base: './'`
+- Windows build produced with `@electron/packager --platform=win32`, delivered as a zip containing `F1TelemetryHub.exe` (unsigned; Windows SmartScreen will need "Run anyway" the first time)
 - Every route gets proper SEO head metadata
 
 ## Build order
 
-1. Design system + app shell (sidebar nav, top status bar, fonts, tokens)
-2. Demo simulation engine (shared data layer all pages consume)
+1. Design directions for the cockpit, then the design system and app shell
+2. Simulation engine + shared telemetry store
 3. Live / Solo Engineer dashboard
-4. Strategy + Pre-Race pages
-5. Sessions + Driver Profile + Championship
+4. Strategy and Pre-Race
+5. Sessions, Driver Profile, Championship
 6. Split Screen
-7. Live telemetry bridge + connection panel
-8. Polish: animations, responsiveness, SEO metadata, final review
+7. Electron shell with native UDP listener + connection panel (WAITING / LIVE, packet rate, setup guide)
+8. Package the Windows `.exe`, polish, responsiveness, metadata
