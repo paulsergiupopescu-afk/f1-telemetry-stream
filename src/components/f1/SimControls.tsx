@@ -39,7 +39,7 @@ export function SimControls() {
               doPit(c);
               toast.success(`Box this lap — ${COMPOUND_LABEL[c]}`);
             }}
-            className="px-2 py-1 font-display text-xs tracking-wider uppercase hover:bg-surface-2"
+            className="px-2 py-1 font-display text-xs tracking-[0.02em] uppercase hover:bg-surface-2"
             style={{ color: compoundVar(c) }}
           >
             Pit {COMPOUND_LABEL[c][0]}

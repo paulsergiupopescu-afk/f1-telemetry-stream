@@ -7,6 +7,7 @@ import {
   History,
   Route as RouteIcon,
   SplitSquareHorizontal,
+  Timer,
   Trophy,
   User,
 } from "lucide-react";
@@ -19,6 +20,7 @@ import { cn } from "@/lib/utils";
 
 const NAV = [
   { to: "/", label: "Solo Engineer", icon: Gauge },
+  { to: "/coach", label: "Coach Mode", icon: Timer },
   { to: "/strategy", label: "Live Strategy", icon: RouteIcon },
   { to: "/pre-race", label: "Pre-Race", icon: Flag },
   { to: "/split", label: "Split Screen", icon: SplitSquareHorizontal },
@@ -52,20 +54,20 @@ export function Shell({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex min-h-screen">
-      <aside className="sticky top-0 hidden h-screen w-[13.5rem] shrink-0 flex-col border-r border-sidebar-border bg-sidebar/85 backdrop-blur lg:flex">
-        <div className="flex items-center gap-2 border-b border-sidebar-border px-4 py-4">
-          <span className="grid h-8 w-8 place-items-center rounded-sm bg-primary text-primary-foreground">
+      <aside className="glass sticky top-0 hidden h-screen w-[14.5rem] shrink-0 flex-col border-r border-sidebar-border lg:flex">
+        <div className="flex items-center gap-2.5 px-5 py-5">
+          <span className="grid h-8 w-8 place-items-center rounded-xl bg-primary text-primary-foreground">
             <Activity className="h-4 w-4" />
           </span>
           <div className="leading-tight">
-            <div className="font-display text-base font-bold tracking-[0.18em] uppercase">
-              Telemetry
+            <div className="font-display text-[0.95rem] font-semibold tracking-[-0.01em]">
+              Telemetry Hub
             </div>
-            <div className="label-xs text-primary">F1 Hub · 26</div>
+            <div className="text-[11px] text-muted-foreground">F1 · 26</div>
           </div>
         </div>
 
-        <nav className="flex-1 space-y-0.5 p-2">
+        <nav className="flex-1 space-y-1 px-3">
           {NAV.map(({ to, label, icon: Icon }) => {
             const active = pathname === to;
             return (
@@ -73,18 +75,19 @@ export function Shell({ children }: { children: ReactNode }) {
                 key={to}
                 to={to}
                 className={cn(
-                  "flex items-center gap-2.5 rounded-sm px-2.5 py-2 font-display text-sm tracking-wider uppercase transition-colors",
+                  "flex items-center gap-2.5 rounded-xl px-3 py-2 text-[0.86rem] font-medium transition-colors",
                   active
-                    ? "bg-primary/15 text-foreground shadow-[inset_2px_0_0_0_var(--primary)]"
-                    : "text-muted-foreground hover:bg-sidebar-accent hover:text-foreground",
+                    ? "bg-surface-2 text-foreground"
+                    : "text-muted-foreground hover:bg-surface hover:text-foreground",
                 )}
               >
-                <Icon className="h-4 w-4 shrink-0" />
+                <Icon className={cn("h-4 w-4 shrink-0", active && "text-primary")} />
                 {label}
               </Link>
             );
           })}
         </nav>
+
 
         <div className="border-t border-sidebar-border p-3">
           <div className="label-xs mb-1">Source</div>
@@ -156,7 +159,7 @@ export function Shell({ children }: { children: ReactNode }) {
                 key={to}
                 to={to}
                 className={cn(
-                  "flex shrink-0 items-center gap-1.5 rounded-sm px-2 py-1.5 font-display text-xs tracking-wider uppercase",
+                  "flex shrink-0 items-center gap-1.5 rounded-sm px-2 py-1.5 font-display text-xs tracking-[0.02em] uppercase",
                   pathname === to ? "bg-primary/15 text-foreground" : "text-muted-foreground",
                 )}
               >

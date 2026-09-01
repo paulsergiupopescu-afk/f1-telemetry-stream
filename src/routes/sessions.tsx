@@ -61,7 +61,7 @@ function Sessions() {
                       : "border-border hover:bg-surface-2",
                   )}
                 >
-                  <div className="font-display text-sm tracking-wider uppercase">{s.label}</div>
+                  <div className="font-display text-sm tracking-[0.02em] uppercase">{s.label}</div>
                   <div className="num flex justify-between text-[11px] text-muted-foreground">
                     <span>{getTrack(s.trackId).short}</span>
                     <span style={{ color: compoundVar(s.compound) }}>
