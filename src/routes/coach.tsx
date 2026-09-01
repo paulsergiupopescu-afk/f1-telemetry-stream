@@ -45,13 +45,15 @@ function useHabits(): DrivingHabits {
 
   useEffect(() => {
     const a = acc.current;
+    const thr = state.throttle / 100;
+    const brk = state.brake / 100;
     a.n += 1;
-    if (state.throttle < 0.05 && state.brake < 0.05) a.coast += 1;
-    if (state.throttle > 0.97) a.full += 1;
-    if (state.brake > 0.05) {
+    if (thr < 0.05 && brk < 0.05) a.coast += 1;
+    if (thr > 0.97) a.full += 1;
+    if (brk > 0.05) {
       a.brakeSamples += 1;
-      a.brakeSum += state.brake;
-      if (state.throttle > 0.1) a.overlap += 1;
+      a.brakeSum += brk;
+      if (thr > 0.1) a.overlap += 1;
     }
     if (a.n % 15 === 0) {
       setHabits({
